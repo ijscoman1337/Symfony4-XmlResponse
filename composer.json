@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ijscoman1337\\Symfony\\Response\\XmlResponse": ""
+      "Ijscoman1337\\Symfony\\Response\\XmlResponse\\": ""
     }
   }
 }
