@@ -1,5 +1,5 @@
 {
-  "name": "ijscoman1337/symfony-xml-response",
+  "name": "JulianHoogendoorn/SymfonyXmlResponse",
   "type": "library",
   "description": "A barebone XML Response formatter for Symfony.",
   "keywords": ["symfony", "xml", "response"],
@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Symfony4XmlResponse\\XmlResponse\\": ""
+      "JulianHoogendoorn\\SymfonyXmlResponse\\": ""
     }
   }
 }
