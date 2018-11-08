@@ -1,5 +1,5 @@
 {
-  "name": "Ijscoman/Symfony/Response/XmlResponse",
+  "name": "Ijscoman/XmlResponse",
   "type": "library",
   "description": "A barebone XML Response formatter for Symfony.",
   "keywords": ["symfony", "xml", "response"],
