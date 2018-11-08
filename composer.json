@@ -1,8 +1,9 @@
 {
-  "name": "Ijscoman/XmlResponse",
+  "name": "Ijscoman1337/XmlResponse",
   "type": "library",
   "description": "A barebone XML Response formatter for Symfony.",
   "keywords": ["symfony", "xml", "response"],
+  "version": "0.1 alpha",
 
   "require": {
     "php": ">=7.2.11"
@@ -13,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ijscoman\\Symfony\\Response\\XmlResponse\\": ""
+      "Ijscoman1337\\XmlResponse\\": ""
     }
   }
 }
