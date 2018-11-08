@@ -1,6 +1,6 @@
 <?php
 
-namespace Ijscoman1337\Symfony\Responses\XmlResponse;
+namespace Ijscoman\Symfony\Responses\XmlResponse;
 
 use Symfony\Component\HttpFoundation\Response;
 
