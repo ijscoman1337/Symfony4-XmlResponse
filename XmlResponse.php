@@ -8,19 +8,19 @@ class XmlResponse extends Response
 {
     protected $data = '';
     protected $xml_writer;
-    public $root_element_name = 'document';
-    public $xslt_file_path = '';
+    public $rootElementName = 'document';
+    public $xsltFilePath = '';
 
     public function __construct($data = null, $status = 200, $headers = array())
     {
         parent::__construct('', $status, $headers);
-        if (null === $data) {
-            $data = new \ArrayObject();
-        }
         $this->xml_writer = new \XMLWriter();
-        if (!is_null($data)) {
-            $this->setData($data);
+
+        if ($data != null)
+        {
+            $this->setDataAndGetDocument($data);
         }
+
     }
 
     public static function create($data = null, $status = 200, $headers = array())
@@ -28,66 +28,89 @@ class XmlResponse extends Response
         return new static($data, $status, $headers);
     }
 
-    public function setData($data = array())
+    public function setDataAndGetDocument($data = array())
     {
-        try {
-            $this->startDocument($this->root_element_name, $this->xslt_file_path);
-            $this->fromArray($data, $this->root_element_name);
+        try
+        {
+            $this->startDocument($this->rootElementName, $this->xsltFilePath);
+            $this->fromArray($data, $this->rootElementName);
             $this->data = $this->getDocument();
-        } catch (\Exception $exception) {
+        }
+        catch (\Exception $exception)
+        {
             throw $exception;
         }
+
         return $this->update();
     }
 
     protected function update()
     {
-        if (!$this->headers->has('Content-Type')) {
+        if (!$this->headers->has('Content-Type'))
+        {
             $this->headers->set('Content-Type', 'application/xml');
         }
+
         return $this->setContent($this->data);
     }
 
-    protected function startDocument($prm_rootElementName, $prm_xsltFilePath = '')
+    protected function startDocument($rootElementName, $xsltFilePath = '')
     {
         $this->xml_writer->openMemory();
         $this->xml_writer->setIndent(true);
         $this->xml_writer->setIndentString(' ');
         $this->xml_writer->startDocument('1.0', 'UTF-8');
-        if ($prm_xsltFilePath) {
-            $this->xml_writer->writePi('xml-stylesheet', 'type="text/xsl" href="' . $prm_xsltFilePath . '"');
+
+        if ($xsltFilePath)
+        {
+            $this->xml_writer->writePi('xml-stylesheet', 'type="text/xsl" href="' . $xsltFilePath . '"');
         }
-        $this->xml_writer->startElement($prm_rootElementName);
+
+        $this->xml_writer->startElement($rootElementName);
     }
 
-    protected function setElement($prm_elementName, $prm_ElementText)
+    protected function setElement($elementName, $elementText)
     {
-        if (!isset($prm_elementName)) {
-            throw new \InvalidArgumentException('Element name cannot be null. ' . var_export($prm_elementName, true));
+        if (!isset($elementName))
+        {
+            throw new \InvalidArgumentException('Element name cannot be null. ' . var_export($elementName, true));
         }
-        if (preg_match('/[a-zA-Z]/', substr($prm_elementName, 0, 1)) !== 1) {
+
+        if (preg_match('/[a-zA-Z]/', substr($elementName, 0, 1)) !== 1)
+        {
             throw new \InvalidArgumentException(
-                'Element name must begin with alpha character. ' . var_export($prm_elementName, true)
+                'Element name must begin with alpha character. ' . var_export($elementName, true)
             );
         }
-        $this->xml_writer->startElement($prm_elementName);
-        $this->xml_writer->text($prm_ElementText);
+        $this->xml_writer->startElement($elementName);
+        $this->xml_writer->text($elementText);
         $this->xml_writer->endElement();
     }
 
-    protected function fromArray($prm_array, $prm_name)
+    protected function fromArray($data, $nameForElement)
     {
-        if (is_array($prm_array)) {
-            foreach ($prm_array as $index => $element) {
-                if (is_array($element)) {
+        if (is_array($data)) {
+            foreach ($data as $index => $element)
+            {
+                if (is_array($element))
+                {
                     $this->xml_writer->startElement($index);
                     $this->fromArray($element, $index);
                     $this->xml_writer->endElement();
-                } elseif (substr($index, 0, 1) == '@') {
+                }
+
+                elseif (substr($index, 0, 1) == '@')
+                {
                     $this->xml_writer->writeAttribute(substr($index, 1), $element);
-                } elseif ($index == $prm_name) {
+                }
+
+                elseif ($index == $nameForElement)
+                {
                     $this->xml_writer->text($element);
-                } else {
+                }
+
+                else
+                {
                     $this->setElement($index, $element);
                 }
             }
